@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
     val head = create7Nodes()
     println(head)
-    val removeNthFromEnd = Solution().deleteDuplicates(head)
+    val removeNthFromEnd = Solution().middleNode(head)
     println(removeNthFromEnd)
 }
 
@@ -87,5 +87,15 @@ class Solution {
             current = current.next
         }
         return dummyHead.next
+    }
+
+    fun middleNode(head: ListNode?): ListNode? {
+        var current = head
+        var middle = current
+        while (current?.next != null) {
+            middle = middle?.next
+            current = current.next?.next
+        }
+        return middle
     }
 }
