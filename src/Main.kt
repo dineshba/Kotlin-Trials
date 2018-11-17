@@ -1,21 +1,21 @@
 fun main(args: Array<String>) {
     val head = create7Nodes()
     println(head)
-    val removeNthFromEnd = Solution().swapPairs(head)
+    val removeNthFromEnd = Solution().deleteDuplicates(head)
     println(removeNthFromEnd)
 }
 
 private fun create7Nodes(): ListNode {
     val head = ListNode(1)
-    val listNode2 = ListNode(2)
+    val listNode2 = ListNode(1)
     head.next = listNode2
     val listNode3 = ListNode(3)
     listNode2.next = listNode3
-    val listNode4 = ListNode(4)
+    val listNode4 = ListNode(3)
     listNode3.next = listNode4
-    val listNode5 = ListNode(5)
+    val listNode5 = ListNode(4)
     listNode4.next = listNode5
-    val listNode6 = ListNode(6)
+    val listNode6 = ListNode(4)
     listNode5.next = listNode6
     val listNode7 = ListNode(7)
     listNode6.next = listNode7
@@ -61,5 +61,31 @@ class Solution {
         reversed.next = head
         head.next = null
         return Pair(head, masterHead)
+    }
+
+    fun deleteDuplicates(head: ListNode?): ListNode? {
+        val dummyHead = ListNode(Int.MIN_VALUE)
+        dummyHead.next = head ?: return null
+        var previousHead = dummyHead
+        var current: ListNode? = previousHead
+        var duplicated = Int.MIN_VALUE
+        while (current != null) {
+            current.next?.let { next ->
+                if (next.`val` == current?.`val` || current?.`val` == duplicated) {
+                    duplicated = current!!.`val`
+                } else {
+                    previousHead.next = current
+                    previousHead = current!!
+                }
+            } ?: run {
+                if (current?.`val` != duplicated) {
+                    previousHead.next = current
+                } else {
+                    previousHead.next = null
+                }
+            }
+            current = current.next
+        }
+        return dummyHead.next
     }
 }
