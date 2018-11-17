@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
     val head = create7Nodes()
     println(head)
-    val removeNthFromEnd = Solution().reverse(head)
+    val removeNthFromEnd = Solution().swapPairs(head)
     println(removeNthFromEnd)
 }
 
@@ -31,6 +31,22 @@ data class ListNode(var `val`: Int = 0) {
 }
 
 class Solution {
+
+    fun swapPairs(head: ListNode?): ListNode? {
+        var iterator = head
+        val nextHead: ListNode? = iterator?.next ?: return iterator
+        var previousHead: ListNode? = null
+        while (iterator?.next != null) {
+            iterator?.next?.let {
+                iterator?.next = it.next
+                it.next = iterator
+                previousHead?.next = it
+                previousHead = iterator
+            }
+            iterator = iterator?.next
+        }
+        return nextHead
+    }
 
     fun reverse(head: ListNode): ListNode? {
         val (_, newHead) = reverse(head, head.next)
