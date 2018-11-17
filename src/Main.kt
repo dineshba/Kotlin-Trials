@@ -1,22 +1,22 @@
 fun main(args: Array<String>) {
     val head = create7Nodes()
     println(head)
-    val removeNthFromEnd = Solution().middleNode(head)
+    val removeNthFromEnd = Solution().reverseKGroup(head, 3)
     println(removeNthFromEnd)
 }
 
 private fun create7Nodes(): ListNode {
     val head = ListNode(1)
-    val listNode2 = ListNode(1)
+    val listNode2 = ListNode(2)
     head.next = listNode2
     val listNode3 = ListNode(3)
     listNode2.next = listNode3
-    val listNode4 = ListNode(3)
+    val listNode4 = ListNode(4)
     listNode3.next = listNode4
-    val listNode5 = ListNode(4)
+    val listNode5 = ListNode(5)
     listNode4.next = listNode5
-    val listNode6 = ListNode(4)
-    listNode5.next = listNode6
+    val listNode6 = ListNode(6)
+//    listNode5.next = listNode6
     val listNode7 = ListNode(7)
     listNode6.next = listNode7
     return head
@@ -97,5 +97,23 @@ class Solution {
             current = current.next?.next
         }
         return middle
+    }
+
+    fun reverseKGroup(head: ListNode?, k: Int): ListNode? {
+        var iterator: ListNode? = head ?: return null
+        var subGroupCounter = 1
+        while (subGroupCounter < k && iterator?.next != null) {
+            subGroupCounter++
+            iterator = iterator.next
+        }
+        return if (subGroupCounter == k) {
+            val nextSubGroupHead = iterator?.next
+            iterator?.next = null
+            val reversed = reverse(head)
+            head.next = reverseKGroup(nextSubGroupHead, k)
+            reversed
+        } else {
+            head
+        }
     }
 }
