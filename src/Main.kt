@@ -1,7 +1,8 @@
 fun main(args: Array<String>) {
     val head = create7Nodes()
+    val head1 = create7Nodes()
     println(head)
-    val removeNthFromEnd = Solution().rotateRight(head, 2)
+    val removeNthFromEnd = Solution().mergeKLists(arrayOf(head, head1))
     println(removeNthFromEnd)
 }
 
@@ -156,4 +157,42 @@ class Solution {
         }
         return Triple(listNode, newK, last)
     }
+
+    fun mergeKLists(lists: Array<ListNode?>): ListNode? {
+        val dummyNode = ListNode(Int.MIN_VALUE)
+        var currentNode = dummyNode
+        val newList = lists.toMutableList()
+        var smallestNode = getSmallestNode(newList)
+        while (smallestNode != null) {
+            currentNode.next = smallestNode
+            currentNode = currentNode.next!!
+            smallestNode = getSmallestNode(newList)
+        }
+        return dummyNode.next
+    }
+
+    private fun getSmallestNode(lists: MutableList<ListNode?>): ListNode? {
+        var index = -1
+        var largestValue = Int.MAX_VALUE
+        var listNode: ListNode? = null
+        lists.indices.forEach {
+            val node = lists[it]
+            if (node != null && node.`val` <= largestValue) {
+                largestValue = node.`val`
+                index = it
+            }
+        }
+        if (index != -1) {
+            listNode = lists[index]
+            listNode?.next?.let {
+                lists[index] = it
+            } ?: run {
+                lists.removeAt(index)
+            }
+        }
+        listNode?.next = null
+        return listNode
+    }
+
+    
 }
