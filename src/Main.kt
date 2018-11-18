@@ -1,7 +1,7 @@
 fun main(args: Array<String>) {
     val head = create7Nodes()
     println(head)
-    val removeNthFromEnd = Solution().reverseKGroup(head, 3)
+    val removeNthFromEnd = Solution().rotateRight(head, 2)
     println(removeNthFromEnd)
 }
 
@@ -115,5 +115,45 @@ class Solution {
         } else {
             head
         }
+    }
+
+    fun rotateRight(head: ListNode?, k: Int): ListNode? {
+        val size = size(head)
+        val k1 = k % size
+        if (k1 == 0 || head?.next == null) {
+            return head
+        }
+        println(size)
+        println(k)
+        println(k1)
+        val (newHead, _, last) = rotateRightRecursively(head, k1)
+        last?.next = head
+        return newHead
+    }
+
+    private fun size(head: ListNode?): Int {
+        var current = head
+        var count = 0
+        while (current != null) {
+            count++
+            current = current.next
+        }
+        return count
+    }
+
+    private fun rotateRightRecursively(head: ListNode?, k: Int): Triple<ListNode?, Int, ListNode?> {
+        if (head?.next?.next == null) {
+            val last = head?.next
+            head?.next = null
+            return Triple(last, k - 1, last)
+        }
+        val (listNode, newK, last) = rotateRightRecursively(head.next, k)
+        if (newK > 0) {
+            val next = head.next
+            next?.next = listNode
+            head.next = null
+            return Triple(next, newK - 1, last)
+        }
+        return Triple(listNode, newK, last)
     }
 }
